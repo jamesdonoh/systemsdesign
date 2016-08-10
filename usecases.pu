@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+
+actor FeedSubscriber
+actor FulltextFeedSubscriber
+actor Journalist
+
+rectangle FeedManager {
+  FeedSubscriber -> (ListFeeds)
+  FeedSubscriber -> (GetFeed)
+  FulltextFeedSubscriber -> (GetFulltextFeed)
+  (CreateContent) <- Journalist
+  (UpdateContent) <- Journalist
+}
+
+@enduml
+

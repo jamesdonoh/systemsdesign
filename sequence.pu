@@ -1,0 +1,21 @@
+@startuml
+actor User
+
+User -> Karanga: GET /rss.xml
+activate Karanga
+
+Karanga -> Morph: GET /data/...
+activate Morph
+
+Morph -> "Content API": GET /content/...
+activate "Content API"
+Morph <- "Content API": JSON
+deactivate "Content API"
+
+Karanga <- Morph: <rss>
+deactivate Morph
+
+User <- Karanga: <rss>
+deactivate Karanga
+
+@enduml
