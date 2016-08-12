@@ -78,11 +78,11 @@ blah
 
 \section{Results}
 
-In this section we present a series of UML diagrams that further explore the problematical system described above. These diagrams are organised according to some of the phases of the software development lifecycle as defined by the Unified Process (UP).
+In this section we present a series of UML diagrams that further explore the problematical situation described above. These diagrams are organised according to some of the phases of the software development lifecycle as defined by the Unified Process (UP).
 
 \subsection{Requirements}
 
-From the root definition and list of actors given earlier, we can create the UML use case diagram shown in Figure~\ref{use-cases} which is non-comprehensive depiction of the use cases that the system must support.
+From the root definition and list of actors given earlier, we can create the UML use case diagram shown in Figure~\ref{use-cases} which is non-comprehensive depiction of some of the use cases that the system must support. For the purposes of this diagram three actors have been identified, which represent three roles that users of the system may occupy. Further roles could be added in response to later analysis, since as Arlow and Neustadt (p.74) stress, use case modelling is an iterative process. This provisionality applies equally to the system boundary (represented by the black rectangle) that indicates the \textit{subject} of the diagram.
 
 \begin{figure}
   \includegraphics[width=\textwidth]{usecases.png}
@@ -90,7 +90,7 @@ From the root definition and list of actors given earlier, we can create the UML
   \label{use-cases}
 \end{figure}
 
-In order to describe each use case in more detail, we can use the tabular structure recommended by Arlow and Neustadt, as seen in Table~\ref{use-case-detail}.
+In order to describe each use case in more detail, we can use the tabular structure for use case specifications recommended by Arlow and Neustadt, an example of which for one of the use cases shown in Figure~\ref{use-cases} (\texttt{GetFeed}), can be seen in Table~\ref{use-case-detail}. In this use case the primary actor (the one who triggers the use case) is the \texttt{FeedSubscriber}. This use case has one major possible alternative flow, which occurs when the subscriber requests a non-existent feed and is shown in Table~\ref{use-case-alt-detail}. An alternative approach would have been to use the \textit{If} and \textit{Else} keywords within the main flow of Table~\ref{use-case-detail} to describe an alternate flow without creating an entire separate specification.
 
 \begin{table}[]
 \begin{center}
@@ -101,7 +101,7 @@ In order to describe each use case in more detail, we can use the tabular struct
 ID: 1 \\
 \hline
 Brief description: \\
-Return a web syndication feed containing information about content that has recently been created or updated \\
+The system return a web syndication feed containing information about content that has recently been created or updated \\
 \hline
 Primary actors: \\
 FeedSubscriber \\
@@ -110,25 +110,58 @@ Secondary actors: \\
 None \\
 \hline
 Preconditions: \\
-1. The requested feed exists \\
-2. The requested feed contains some content \\
+None \\
 \hline
 Main flow: \\
-1. The subscriber requests the feed by making a network request \\
-2. The feed is generated using the parameters given in the request \\
-3. The feed is serialized to the requested format \\
-4. The seralized feed is returned to the subscriber \\
+1. The use case starts when the FeedSubscriber requests a feed via the network \\
+2. The system verifies that the feed exists and has content \\
+3. The system generates the feed using the parameters given in the request \\
+4. The system serialises the feed is the required format \\
+5. The system returns the serialized feed to the FeedSubscriber \\
 \hline
 Postconditions: \\
 None \\
 \hline
 Alternative flows: \\
-1. If the feed does not exist... \\
+GetFeed:MissingFeed \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Example of a Use Case detail}
+\caption{Example of a use case specification}
 \label{use-case-detail}
+\end{table}
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{ | p{\textwidth} |}
+\hline
+\multicolumn{1}{|c|}{Alternative flow: GetFeed:MissingFeed} \\
+\hline
+ID: 1.1 \\
+\hline
+Brief description: \\
+The system notifies the user that the requested feed does not exist. \\
+\hline
+Primary actors: \\
+FeedSubscriber \\
+\hline
+Secondary actors: \\
+None \\
+\hline
+Preconditions: \\
+None \\
+\hline
+Alternative flow: \\
+1. The alternative flow begings after step 2 of the main flow. \\
+2. The system displays an HTML error page to the FeedSubcriber \\
+\hline
+Postconditions: \\
+None \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Example of a use case alternative flow specification}
+\label{use-case-alt-detail}
 \end{table}
 
 \clearpage
