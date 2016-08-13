@@ -90,7 +90,10 @@ From the root definition and list of actors given earlier, we can create the UML
   \label{use-cases}
 \end{figure}
 
-In order to describe each use case in more detail, we can use the tabular structure for use case specifications recommended by Arlow and Neustadt, an example of which for one of the use cases shown in Figure~\ref{use-cases} (\texttt{GetFeed}), can be seen in Table~\ref{use-case-detail}. In this use case the primary actor (the one who triggers the use case) is the \texttt{FeedSubscriber}. This use case has one major possible alternative flow, which occurs when the subscriber requests a non-existent feed and is shown in Table~\ref{use-case-alt-detail}. An alternative approach would have been to use the \textit{If} and \textit{Else} keywords within the main flow of Table~\ref{use-case-detail} to describe an alternate flow without creating an entire separate specification.
+In order to describe each use case in more detail, we can use the tabular structure for use case specifications recommended by Arlow and Neustadt, an example of which for one of the use cases shown in Figure~\ref{use-cases} (\texttt{GetFeed}), can be seen in Table~\ref{use-case-detail}. In this use case the primary actor (the one who triggers the use case) is the \texttt{Subscriber}. This use case has one major possible alternative flow, which occurs when the subscriber requests a non-existent feed and is shown in Table~\ref{use-case-alt-detail}. An alternative approach would have been to use the \textit{If} and \textit{Else} keywords within the main flow of Table~\ref{use-case-detail} to describe an alternate flow without creating an entire separate specification. This option was rejected on the grounds that it might hinder intelligibility for non-technical readers, since "use cases are all about communication with the stakeholders" (Arlow and Neustadt, p.101).
+
+% More discussion of stakeholder difficulties with advanced use case features point on p110
+% TODO discuss merits of using <<include>> etc. and why we reject it?
 
 \begin{table}[]
 \begin{center}
@@ -104,7 +107,7 @@ Brief description: \\
 The system return a web syndication feed containing information about content that has recently been created or updated \\
 \hline
 Primary actors: \\
-FeedSubscriber \\
+Subscriber \\
 \hline
 Secondary actors: \\
 None \\
@@ -113,11 +116,10 @@ Preconditions: \\
 None \\
 \hline
 Main flow: \\
-1. The use case starts when the FeedSubscriber requests a feed via the network \\
-2. The system verifies that the feed exists and has content \\
-3. The system generates the feed using the parameters given in the request \\
-4. The system serialises the feed is the required format \\
-5. The system returns the serialized feed to the FeedSubscriber \\
+1. The use case starts when the Subscriber requests a feed via the network \\
+2. The system verifies that there is content for the feed \\
+3. The system generates the feed using the options given in the request \\
+4. The system returns the generated feed to the Subscriber \\
 \hline
 Postconditions: \\
 None \\
@@ -143,17 +145,17 @@ Brief description: \\
 The system notifies the user that the requested feed does not exist. \\
 \hline
 Primary actors: \\
-FeedSubscriber \\
+Subscriber \\
 \hline
 Secondary actors: \\
 None \\
 \hline
 Preconditions: \\
-None \\
+1. There is no content for the requested feed. \\
 \hline
 Alternative flow: \\
 1. The alternative flow begings after step 2 of the main flow. \\
-2. The system displays an HTML error page to the FeedSubcriber \\
+2. The system displays an error message to the Subscriber \\
 \hline
 Postconditions: \\
 None \\

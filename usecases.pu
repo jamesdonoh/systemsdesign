@@ -1,16 +1,18 @@
 @startuml
 left to right direction
 
-actor FeedSubscriber
-actor FulltextFeedSubscriber
+actor Subscriber
+actor FulltextSubscriber
 actor Journalist
+actor AudiencesAnalyst
 
 rectangle FeedManager {
-  FeedSubscriber -> (ListFeeds)
-  FeedSubscriber -> (GetFeed)
-  FulltextFeedSubscriber -> (GetFulltextFeed)
+  Subscriber -> (ListFeeds)
+  Subscriber -> (GetFeed)
+  FulltextSubscriber -> (GetFulltextFeed)
   (CreateContent) <- Journalist
   (UpdateContent) <- Journalist
+  (CreateUsageReport) <- AudiencesAnalyst
 }
 
 @enduml
