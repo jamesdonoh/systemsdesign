@@ -1,21 +1,52 @@
 @startuml
-actor User
 
-User -> Karanga: GET /rss.xml
-activate Karanga
+actor ":Subscriber" as subscriber
+participant ":FeedBroker" as broker
+participant "mundoFeed:Feed" as mundoFeed
 
-Karanga -> Morph: GET /data/...
-activate Morph
+subscriber -> broker: getFeed("mundo")
+activate broker
 
-Morph -> "Content API": GET /content/...
-activate "Content API"
-Morph <- "Content API": JSON
-deactivate "Content API"
+note left
+    The Subscriber requests
+    a specific feed
+end note
 
-Karanga <- Morph: <rss>
-deactivate Morph
+broker -> broker: isValid = validateFeed("mundo")
+activate broker
+broker --> broker
+deactivate broker
 
-User <- Karanga: <rss>
-deactivate Karanga
+alt isValid
+
+    broker --> subscriber: error
+
+note left
+    If the feed is invalid
+    an error is returned
+end note
+
+else else
+
+    broker -> broker: generateFeed("mundo")
+    activate broker
+
+    create mundoFeed
+    broker -> mundoFeed: <<create>>
+
+    note left
+        Otherwise the system generates
+        a new feed
+    end note
+
+    broker --> broker
+    deactivate broker
+
+    broker --> subscriber: mundoFeed
+    deactivate broker
+
+end
+
+hide footbox
 
 @enduml

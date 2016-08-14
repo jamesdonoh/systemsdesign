@@ -1,7 +1,7 @@
 PDFLATEX=pdflatex
 PLANTUML=java -jar ~/Downloads/plantuml.jar
 
-GENERATED_FIGURES=usecases.png sequence.png
+GENERATED_FIGURES=usecases.png classes.png sequence.png
 FIGURES=richpicture.png $(GENERATED_FIGURES)
 
 all: report.pdf

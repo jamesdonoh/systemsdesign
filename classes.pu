@@ -1,0 +1,40 @@
+@startuml
+
+class Feed {
+    name
+    language
+    {static} baseUrl
+    addItem()
+    removeItem()
+}
+
+class Site {
+    siteUrl
+    logoUrl
+    rightsStatement
+    contactEmail
+}
+
+class FeedItem {
+    date
+    title
+    url
+    description
+}
+
+class Image {
+    url
+    width
+    height
+    altText
+    copyrightHolder
+}
+
+Feed "0..*" -- "1" Site : has <
+Feed "1" -- "1..*" FeedItem : contains >
+FeedItem "1" --> "1" Image
+
+hide circle
+hide empty methods
+
+@enduml

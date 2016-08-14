@@ -1,0 +1,25 @@
+@startuml
+
+skinparam linetype ortho
+
+object "<u>mundo : Site" as mundo {
+    name = BBC Mundo
+}
+
+object "<u>mundoHomepageFeed : Feed" as mundoFeed {
+    name = bar
+}
+
+object "<u>story1 : FeedItem" as story1 {
+    headline = xxx
+}
+
+object "<u>story2 : FeedItem" as story2 {
+    headline = yyy
+}
+
+mundo -- mundoFeed
+mundoFeed -- story1
+mundoFeed -- story2
+
+@enduml
