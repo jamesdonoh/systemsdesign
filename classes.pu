@@ -1,33 +1,39 @@
 @startuml
 
-class Feed {
-    name
-    language
-    {static} baseUrl
-    addItem()
-    removeItem()
+package Feeds {
+    class Feed {
+        name
+        language
+        {static} baseUrl
+        addItem()
+        removeItem()
+    }
+
+    class Site {
+        siteUrl
+        logoUrl
+        rightsStatement
+        contactEmail
+    }
+
+    class FeedItem {
+        date
+        title
+        url
+        description
+    }
+
+    class Image {
+        url
+        width
+        height
+        altText
+        copyrightHolder
+    }
 }
 
-class Site {
-    siteUrl
-    logoUrl
-    rightsStatement
-    contactEmail
-}
-
-class FeedItem {
-    date
-    title
-    url
-    description
-}
-
-class Image {
-    url
-    width
-    height
-    altText
-    copyrightHolder
+package "Broker Things" {
+    class Broker
 }
 
 Feed "0..*" -- "1" Site : has <
