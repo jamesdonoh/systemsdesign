@@ -1,5 +1,7 @@
 @startuml
 
+skinparam monochrome true
+
 actor ":Subscriber" as subscriber
 participant ":FeedBroker" as broker
 participant "mundoFeed:Feed" as mundoFeed

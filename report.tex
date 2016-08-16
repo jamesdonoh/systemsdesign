@@ -16,12 +16,14 @@
 A collection of thoughts and ideas about random disconnected things.
 \end{abstract}
 
+\tableofcontents
+
 \section{Introduction}
 \subsection{Background}
 
 The BBC World Service website portfolio, which currently includes 27 sites but will soon increase to nearly 40, offers news to millions of users around the world in their own language. A publicly-stated ambition of the BBC is to increase its global audience to 500 million by 2022 (British Broadcasting Corporation (BBC) 2013). One way it can contribute to this effort is through web syndication.
 
-Web syndication allows website owners to publish information about new or changed content in a way that can be reused by other websites or end users. Standards for web syndication have existed in some form since 1997 (World Wide Web Consortium (W3C) 1997), the dominant formats today being RSS (Really Simple Syndication) and Atom (both of these are XML-based and offer a similar feature set; for the purpose of this study they are treated as interchangeable).
+Web syndication feeds allows website owners to publish information about new or changed content in a way that can be reused by other websites or end users. Standards for web syndication have existed in some form since 1997 (World Wide Web Consortium (W3C) 1997), the dominant formats today being RSS (Really Simple Syndication) and Atom (both of these are XML-based and offer a similar feature set; for the purpose of this study they are treated as equivalent).
 
 At the time of writing the World Service sites are being migrated to a new content management system (CMS) and the 'Public Feeds Adaptor' that formerly generated Atom feeds for these sites is going to be decommissioned. Therefore a new system based around the new CMS must be implemented in order to maintain web syndication capability for the existing 27 sites, and to ensure that it is available for the new ones that will be added.
 
@@ -66,13 +68,27 @@ Finally, we should give consideration to environment (the E of CATWOE). There ar
 
 \subsection{Project glossary}
 
+At the outset of any process of systems analysis it is useful to compile a list of key terms used within the business domain to describe concepts that are significant to stakeholders. This glossary can be a useful tool to resolve confusion and ambiguity, especailly where multiple synonyms for the same concept are in use, however it is important that the glossary is kept up to date. Some relevant definitions in the context of this project are given below.
+
 \begin{description}
 
-\item [Syndication feed]
-A feed of syndication stuff
+\item [App]
+A software application typically found on smartphones that is capable of consuming syndication feeds and providing functionality to the user.
+
+\item [Circumvention]
+The process of using syndication feeds or other public formats to bypass state censorship of news sources.
+
+\item [Full-text feed]
+A syndication feed that in addition to the standard metadata also includes the full text of article content, e.g. for use in the circumvention of censorship.
 
 \item [Subscriber]
-blah
+A user who periodically requests a syndication feed, typically by using a piece of third-party client software.
+
+\item [Syndication feed]
+A file in a standard format, such as RSS or Atom, that provides metadata about new and recently updated content on a website, including URLs and titles.
+
+\item [Public Feeds Adaptor]
+An unmaintained in-house legacy software system written in Java used by the BBC until early 2016 to generate Atom feeds for World Service sites
 
 \end{description}
 
@@ -82,13 +98,27 @@ In this section we present a series of UML diagrams that explore the problem dom
 
 \subsection{Requirements}
 
-From the root definition and list of actors given earlier, we can create the UML use case diagram shown in Figure~\ref{use-cases} which is non-comprehensive depiction of some of the use cases that the system must support. For the purposes of this diagram three actors have been identified, which represent three roles that users of the system may occupy. Further roles could be added in response to later analysis, since as Arlow and Neustadt (2005, p.74) stress, use case modelling is an iterative process. This provisionality applies equally to the system boundary (represented by the black rectangle) that indicates the \textit{subject} of the diagram.
+\subsubsection{Use case diagram}
+
+From the root definition and list of actors given earlier, we can create the UML use case diagram shown in Figure~\ref{use-cases} which is non-comprehensive depiction of some of the use cases that the system must support. For the purposes of this diagram four actors have been identified, which represent the key roles that users of the system may occupy. The naming of the roles favours typical business usage where this does not agree with modelling guidance. For example the 'Journalist' role could have been named 'ContentEditor' (since the use cases assigned to the role relate to editing content, and this role could be performed by a variety of different individuals not all of whom have the job title 'Journalist') but this may cause confusion for non-technical stakeholders because of the domain-specific significance of 'Editor'.
 
 \begin{figure}
   \includegraphics[width=\textwidth]{usecases.png}
   \caption{A use case diagram}
   \label{use-cases}
 \end{figure}
+
+% TODO
+% - Check arrow style
+% - Can we extend actors or not?
+
+The actor names may be refined, and further roles added, in response to later analysis, since as Arlow and Neustadt (2005, p.74) stress, use case modelling is an iterative process. This provisionality applies equally to the system boundary (represented by the black rectangle) that indicates the \textit{subject} of the diagram. For the purposes of illustration we have shown the \texttt{AddContent} and \texttt{UpdateContent} use cases as within the system boundary, but in reality these activities are largely decoupled from the syndication feed management process and could be fulfilled by a separate subject.
+
+One functional requirement of the system is the ability to generate certain defined feeds in a 'full text' format which includes the full body text of the article as well as its metadata (title, URL, etc.). This feature is required because some users living in countries with restrictions on Internet access (for example, China) may still be able to access RSS feeds even where access to the originating website has been blocked. Moreover it creates an opportunity for deliberate circumvention of censorship, where the 'full text' feel can be circulated via e-mail, on a USB storage device or even via a custom app, in order to bypass state restrictions on access to international news.
+
+To model this, in Figure\~ref{use-cases} the \texttt{FulltextSubscriber} actor is a specialised form of the \texttt{Subscriber} actor and is therefore a generalisation association exists between the two. This entails that \texttt{FulltextSubscriber} inherits all the use cases of \texttt{Subscriber} and adds a third, \texttt{GetFulltextFeed}. In order to keep use cases as small and focused as possible, one common area of functionality, \texttt{LogUsage} has been separated out into a separate use case and incorporated via \texttt{<<include>>}. This use use case is more than just an implementation detail: a requirement of the new system identified in discussion with stakeholders is that it provides more comprehensive logging of requests than the legacy system it replaces, to enable the business to make informed decisions about how to support web syndication in the future (accessed by the \texttt{CreateUsageReport} use case). We indicate these use cases on the diagram to reflect their relative priority.
+
+\subsubsection{Use case specification}
 
 In order to describe each use case in more detail, we can use the tabular structure for use case specifications recommended by Arlow and Neustadt (2005), an example of which for one of the use cases shown in Figure~\ref{use-cases} (\texttt{GetFeed}), can be seen in Table~\ref{use-case-detail}. In this use case the primary actor (the one who triggers the use case) is the \texttt{Subscriber}. This use case has one major possible alternative flow, which occurs when the subscriber requests a non-existent feed and is shown in Table~\ref{use-case-alt-detail}. An alternative approach would have been to use the \textit{If} and \textit{Else} keywords within the main flow of Table~\ref{use-case-detail} to describe an alternate flow without creating an entire separate specification. This option was rejected on the grounds that it might hinder intelligibility for non-technical readers, since "use cases are all about communication with the stakeholders" (Arlow and Neustadt 2005, p.101).
 
@@ -168,20 +198,29 @@ None \\
 
 \subsection{Analysis}
 
+\subsubsection{Analysis classes}
+
 The use cases identified in the previous section can be used to produce an analysis model that focuses on \textit{what} the system does (but not yet \textit{how} it does it). Any artefacts produced in this workflow should remain useful to as many stakeholders as possible by using language from the business domain and avoiding implementation details (Arlow and Neustadt 2005, p.122).
 
-The subject of the present study suggests the analysis classes shown in Figure~\ref{analysis-classes}. The classes were identified using noun/verb analysis of the project glossary and use cases above, and named based on clearly identifiable 'real world' concepts within the problem domain. They are necessarily high-level at this stage; moreover, features that are typically considerations of design rather than analysis, such as operation parameters, visibility adornments and constructors, have been omitted (Arlow and Neustadt 2005, p137-8, p148). The only operations represented (\texttt{addItem()} and \texttt{removeItem()}) are those that may give rise to a state transitions. Note that the \texttt{items} attribute of the \texttt{Feed} class is shown with the multiplicity expression \texttt{[0..*]} to indicate that \texttt{null} is a possible value for this attribute, if there are no items.
+The subject of the present study suggests the analysis classes shown in Figure~\ref{analysis-classes}. The classes were identified using noun/verb analysis of the project glossary and use cases above, and named based on clearly identifiable 'real world' concepts within the problem domain. They are necessarily high-level at this stage; moreover, features that are typically considerations of design rather than analysis, such as operation parameters, visibility adornments and constructors, have been omitted (Arlow and Neustadt 2005, p137-8, p148).
 
-It should be noted that although the analysis model is intended to represent a generic syndication feed, irrespective of any specific serialisation format, it is somewhat aligned to the structure described by the RSS 2.0 Specification\ref{rss}. This is because ...
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\textwidth]{analysis-classes.png}
+  \end{center}
+  \label{analysis-classes}
+  \caption{Analysis classes}
+\end{figure}
 
-Also excluded from this diagram are 'getter' and 'setter' methods for each of the attributes. These could be represented as pairs of operations for each attribute, e.g. \texttt{getLanguage()} and \texttt{setLanguage()}. Ambler (2005, p.52) considers terms such operations "scaffolding code" and points out they are often be automatically generated by modelling tools. Excluding them from class diagrams may allow readers to more easily see the most significant operations.
+The contents of the \texttt{Feed} package form the foundations of a \textit{domain model} (Fowler 2003) for the system that express both data and behaviour for the business area, i.e. syndication feeds. However, the only operations shown at this stage (\texttt{addItem()} and \texttt{removeItem()}) are those that may give rise to a state transitions. Also excluded from the diagram are 'getter' and 'setter' methods for each of the attributes. These methods, which are more properly a feature of design classes, could be represented as pairs of operations for each attribute, e.g. \texttt{getLanguage()} and \texttt{setLanguage()}. Ambler (2005, p.52) considers terms such operations "scaffolding code" and points out they are often be automatically generated by modelling tools. Excluding them from class diagrams, as shown here here may allow readers to more easily see the most significant operations.
 
-As an alternative to representing class associations diagramatically, we could have shown these relationships using an explicit attribute within the class icon [?] (for example, \texttt{items : FeedItem[0..*]}). The diagramatic approach is in my view easier to immedaitely understand, and avoids having to make assumptions about how associations are implemented during analysis.
+Note that the \texttt{items} attribute of the \texttt{Feed} class is shown with the multiplicity expression \texttt{[0..*]} to indicate that \texttt{null} is a possible value for this attribute, if there are no items. As an alternative to representing class associations diagramatically, we could have shown these relationships using an explicit attribute within the class icon [?] (for example, \texttt{items : FeedItem[0..*]}). The diagramatic approach is in my view easier to immedaitely understand, and avoids having to make assumptions about how associations are implemented during analysis.
 
 To indicate navigability between classes, I have followed Arlow and Neustadt (2005) in suppressing crosses and using a single arrow for unidirectional associations. Following this idiom, it is implicit that the association between \texttt{Feed} and \texttt{Site}, for example, is bidirectional, whereas the association between \texttt{FeedItem} and \texttt{Image} is explicitly one-way. This improves the overall legibility of the diagram, at the expense of some ambiguity.
 
 Although UML supports adding role names at one or both ends of an association to indicate how each class is involved, Ambler (2005, p.65) states that the association name should be sufficient to make roles clear, reserving explicit role names for situations where there are multiple associations between the same classes.
 
+It should be noted that although the analysis model is intended to represent a generic syndication feed, irrespective of any specific serialisation format, it is somewhat aligned to the structure described by the RSS 2.0 Specification\cite{rss}. This is because Atom, the other main competing syndication format, is by and large a functional superset of RSS 2.0, and almost all features of RSS 2.0 can be mapped to an Atom feed without difficulty (for a detailed comparison, see Ruby 2008). Moreover, RSS 2.0 is more widely supported and familiar to developers. For this reason we treat it as a "lowest common denominator" of syndication feed formats, while explicitly allowing the system to provide Atom feeds as well.
 
 % TODO 
 % add a generalization relationship to class diagram
@@ -190,18 +229,11 @@ Although UML supports adding role names at one or both ends of an association to
 
 % TODO
 % discuss alternative models - cohesion? coupling? see p161 and ch.15
+%   design goals: high cohesion (p.349) / low coupling
 %   avoiding deep inheriteance p163
 %   risks of overiding a concrete methid p215
 
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=\textwidth]{classes.png}
-  \end{center}
-  \label{analysis-classes}
-  \caption{Analysis classes}
-\end{figure}
-
-\subsection{Use case realisation}
+\subsubsection{Use case realisation}
 
 % Interaction diagrams
 % - add logging?
@@ -218,9 +250,55 @@ Use case realisation allows us to investigate how analysis classes collaborate i
 
 Figure~\ref{sequence-diagram} shows a sequence diagram which realises the 'GetFeed' use case seen earlier.
 
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\textwidth]{sequence.png}
+  \end{center}
+  \label{sequence-diagram}
+  \caption{Sequence diagram for 'GetFeed'}
+\end{figure}
+
 The result of the \texttt{validateFeed} self-delegation message sent by \texttt{FeedBroker} is assigned to a temporary variable, \texttt{isValid}. This enables it to be used in the guard conditions of the \texttt{alt} operator (is there an alternative?)
 
-\subsection{Activity}
+\subsection{Design}
+
+\subsubsection{Design classes}
+
+In the design workflow we typically refine the relationships between classes to make them explicit. Figure~\ref{design-classes} shows a refinement of some of the design classes from Figure~\ref{analysis-classes}. Attributes and association names have been omitted for clarity, in order to focus on the semantics of the associations. For example, \texttt{Feed} and \texttt{FeedItem} form a whole-part relationship, and because multiplicity on the 'whole' side (\texttt{Feed}) is 1 we can consider this a composition relationship (since a \texttt{FeedItem} may only belong to one \texttt{Feed} and can have no meaningful existence outside of a \texttt{Feed} (Arlow and Neustadt 2005, p.367). The implication of Figure~\ref{design-classes} is that an instance of \texttt{Feed} can navigate to the \texttt{FeedItem}s it contains but not vice versa; if we wanted to allow navigability in the other direction we would have to represent this as an unrefined association arrow in the opposite direction (as seen between \texttt{Feed} and \texttt{Site}) to avoid breaking the asymmetry constraint of composition relationships (Arlow and Neustadt 2005, p.377).
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\textwidth]{design-classes.png}
+  \end{center}
+  \label{design-classes}
+  \caption{Refinement of class relationships during design}
+\end{figure}
+
+Note that we have also added the \texttt{ordered} property to the 'part' and of the relationship. This indicates that this one-to-many association must be implemented as an ordered collection of some kind, without placing unnecessary constraints on the implementor by specifying an explicit collection class name. This allows for the most appropriate choice of collection to be used at development time provided it satisfies the constraint (note that \texttt{FeedItem}s are also implicitly unique within the collection - see Arlow and Neustadt 2005, p.373).
+
+If we were targeting a specific programming language with 
+
+\subsubsection{Activity diagram}
+
+After looking at the functionality the system must provide to satisfy use cases, in the design phase we are concerned with the specific details of the system's implementation. Part of this involves "merging in technical solutions from the solution domain" (Arlow and Neustadt 2005, p.333). One architectural constraint that was placed on this project during design was the choice of application technology stack.
+
+In order to promote cooperation and resource sharing between different organisational divisions, Morph, a new Node.js application platform developed by BBC Sport, is being used to implement feed generation. Morph has been engineered with a focus on efficiency and provides substantial component-level caching and a data flow model [ref?].
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\textwidth]{activity.png}
+  \end{center}
+  \label{activity}
+  \caption{Activity diagram}
+\end{figure}
+
+Like the majority of dynamic web applications, Morph uses a pull-based model for generating content, the trigger for resource generation is a request by an HTTP user agent. Once generated, payloads are cached (using Redis, and optionally, Amazon S3). What is different about Morph is that in the event of a cache miss, by default it immediately returns a \texttt{202 Accepted} HTTP response to the user, while the request to generate content is queued for asynchronous generation. The semantics of this response are that the client's request was accepted and scheduled for processing (Wessels 2001).
+
+This corresponds to the 'Fail Fast' design pattern proposed by Nygard (2007), in that the API responds immediately when it determines that it does not have any representation available. One benefit of this approach is that the client can implement a variety of different strategies for retrying and/or recovering, depending on the type of data or functionality being provided.
+
+A UML activity diagram outlining the above approach is give in Figure~\ref{activity}. As the diagram indicates, the Fail Fast behaviour by the provision of a \texttt{timeout} parameter. This causes Morph to wait for a defined period of time for the 
+
+...
 
 \subsection{Method}
 
@@ -230,25 +308,7 @@ The UML 2.0 Superstructure specification states that interaction diagrams (of wh
 
 Note that frames have not been added to the other diagram types such as class diagrams because they are not mandated by the specification for these types (OMG 2011, p.691). This follows the approach taken in the figures in Arlow and Neustadt (2005).
 
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=\textwidth]{sequence.png}
-  \end{center}
-  \label{sequence-diagram}
-  \caption{Sequence diagram for 'GetFeed'}
-\end{figure}
-
-\clearpage
-
-\section{Evaluation}
-
-\subsection{Caching}
-
-One technical constraint placed on the system is the technology stack to be used. In order to promote cooperation and resource sharing between different BBC divisions, Morph, a new Node.js application platform developed by BBC Sport, is being used to generate feeds.
-
-Like most dynamic web applications [ref?], Morph uses a pull-based model for generating content, since the trigger for resource generation is a request by an HTTP user agent. Once generated, representations are cached (using Redis, and optionally, Amazon S3). What is different about Morph is that in the event of a cache miss, it immediately returns a \texttt{202 Accepted} HTTP response to the user, while the request to generate content is queued for asynchronous processing. 
-
-This corresponds to the 'Fail Fast' design pattern proposed by Nygard (2007), in that the API responds immediately when it determines that it does not have any representation available. One benefit of this approach is that the client can implement a variety of different strategies for retrying and/or recovering, depending on the type of data or functionality being provided.
+\section{Evaluation and conclusion}
 
 % Rich pictures are never finished, they should evolve as enquiry progresses (LFA p25)
 
@@ -256,8 +316,11 @@ This corresponds to the 'Fail Fast' design pattern proposed by Nygard (2007), in
 % Limitations of tools (e.g. no package border around interaction diagrams)
 % diagrams not done (e.g. y no communication diagrams?)
 
-\section{Conclusion}
-Nothing besides remains.
+\section{Appendix}
+
+The following is the original proposal made for this report.
+
+\section{References}
 
 \begin{thebibliography}{9}
 
@@ -320,6 +383,16 @@ Ruby, S., 2008.
 \textit{Rss20AndAtom10Compared} [online].
 Available from: http://www.intertwingly.net/wiki/pie/Rss20AndAtom10Compared
 [Accessed 14 August 2016].
+
+\bibitem{webcaching}
+Wessels, D. 2001
+\textit{Web Caching}.
+Sebastopol, CA: O'Reilly
+
+\bibitem{fowler}
+Fowler, M., 2003
+\textit{Patterns of Enterprise Application Architecture}
+Boston, MA: Addison-Wesley
 
 \end{thebibliography}
 

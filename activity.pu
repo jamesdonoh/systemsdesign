@@ -1,0 +1,27 @@
+@startuml
+
+skinparam monochrome true
+
+:Request received<
+:Handle request;
+if (Payload in cache?) then (true)
+    :Respond with payload;
+else (false)
+    :Enqueue payload generation>
+    if (Timeout specified?) then (true)
+        :Schedule timeout>
+        fork
+            :Payload generated<
+            :Respond with payload;
+        fork again
+            :Timeout elapsed<
+            :Respond with 202;
+        endfork
+    else (false)
+        :Respond with 202;
+    endif
+endif
+
+stop
+
+@enduml

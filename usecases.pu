@@ -1,18 +1,26 @@
 @startuml
-left to right direction
+
+skinparam monochrome true
 
 actor Subscriber
 actor FulltextSubscriber
 actor Journalist
 actor AudiencesAnalyst
 
-rectangle FeedManager {
-  Subscriber -> (ListFeeds)
-  Subscriber -> (GetFeed)
-  FulltextSubscriber -> (GetFulltextFeed)
-  (CreateContent) <- Journalist
-  (UpdateContent) <- Journalist
-  (CreateUsageReport) <- AudiencesAnalyst
+rectangle "Web syndication manager" {
+  Subscriber <|-- FulltextSubscriber
+  Subscriber --> (ListFeeds)
+  Subscriber --> (GetFeed)
+
+  FulltextSubscriber --> (GetFulltextFeed)
+
+  Journalist -> (AddContent)
+  Journalist -> (UpdateContent)
+
+  (CreateUsageReport) <-- AudiencesAnalyst
+
+  (GetFeed) ..> (LogUsage): <<include>>
+  (GetFulltextFeed) ..> (LogUsage): <<include>>
 }
 
 @enduml

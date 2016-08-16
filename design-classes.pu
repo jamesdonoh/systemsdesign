@@ -1,0 +1,18 @@
+@startuml
+
+skinparam monochrome true
+skinparam linetype ortho
+
+class "    Feed    " as Feed
+class FeedItem
+class "    Site    " as Site
+
+Feed "1" *--> "{ordered} 1..*" FeedItem
+Site "1" o--> "*" Feed
+Feed --> Site
+
+hide circle
+hide empty members
+
+@enduml
+
