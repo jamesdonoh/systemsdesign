@@ -4,6 +4,9 @@
 \usepackage{aeguill}
 \usepackage{csquotes}
 \usepackage{blindtext}
+\usepackage{lmodern}
+\usepackage{rotating}
+\usepackage{hyperref}
 
 \begin{document}
 
@@ -15,8 +18,6 @@
 \begin{abstract}
 A collection of thoughts and ideas about random disconnected things.
 \end{abstract}
-
-\tableofcontents
 
 \section{Introduction}
 \subsection{Background}
@@ -100,13 +101,13 @@ In this section we present a series of UML diagrams that explore the problem dom
 
 \subsubsection{Use case diagram}
 
-From the root definition and list of actors given earlier, we can create the UML use case diagram shown in Figure~\ref{use-cases} which is non-comprehensive depiction of some of the use cases that the system must support. For the purposes of this diagram four actors have been identified, which represent the key roles that users of the system may occupy. The naming of the roles favours typical business usage where this does not agree with modelling guidance. For example the 'Journalist' role could have been named 'ContentEditor' (since the use cases assigned to the role relate to editing content, and this role could be performed by a variety of different individuals not all of whom have the job title 'Journalist') but this may cause confusion for non-technical stakeholders because of the domain-specific significance of 'Editor'.
+From the root definition and list of actors given earlier, we can create the UML use case diagram shown in Figure~\ref{use-cases} which is non-comprehensive depiction of some of the use cases that the system must support. For the purposes of this diagram four actors have been identified, which represent the key roles that users of the system may occupy. The naming of the roles favours typical business usage where this does not agree with modelling guidance. For example the 'Journalist' role could have been named 'ContentEditor' (since the use cases assigned to the role relate to editing content, and this role could be performed by a variety of different individuals not all of whom have the job title 'Journalist') but this may cause confusion for non-technical stakeholders because of the domain-specific significance of 'Editor'. Moreover, as Fowler (2000, p.43) points out, getting the specific details of actors right is normally less important than finding out the use cases themselves.
 
-\begin{figure}
+\begin{sidewaysfigure}
   \includegraphics[width=\textwidth]{usecases.png}
   \caption{A use case diagram}
   \label{use-cases}
-\end{figure}
+\end{sidewaysfigure}
 
 % TODO
 % - Check arrow style
@@ -116,16 +117,18 @@ The actor names may be refined, and further roles added, in response to later an
 
 One functional requirement of the system is the ability to generate certain defined feeds in a 'full text' format which includes the full body text of the article as well as its metadata (title, URL, etc.). This feature is required because some users living in countries with restrictions on Internet access (for example, China) may still be able to access RSS feeds even where access to the originating website has been blocked. Moreover it creates an opportunity for deliberate circumvention of censorship, where the 'full text' feel can be circulated via e-mail, on a USB storage device or even via a custom app, in order to bypass state restrictions on access to international news.
 
-To model this, in Figure\~ref{use-cases} the \texttt{FulltextSubscriber} actor is a specialised form of the \texttt{Subscriber} actor and is therefore a generalisation association exists between the two. This entails that \texttt{FulltextSubscriber} inherits all the use cases of \texttt{Subscriber} and adds a third, \texttt{GetFulltextFeed}. In order to keep use cases as small and focused as possible, one common area of functionality, \texttt{LogUsage} has been separated out into a separate use case and incorporated via \texttt{<<include>>}. This use use case is more than just an implementation detail: a requirement of the new system identified in discussion with stakeholders is that it provides more comprehensive logging of requests than the legacy system it replaces, to enable the business to make informed decisions about how to support web syndication in the future (accessed by the \texttt{CreateUsageReport} use case). We indicate these use cases on the diagram to reflect their relative priority.
+To model this, in Figure~\ref{use-cases} the \texttt{FulltextSubscriber} actor is a specialised form of the \texttt{Subscriber} actor and is therefore a generalisation association exists between the two. This entails that \texttt{FulltextSubscriber} inherits all the use cases of \texttt{Subscriber} and adds a third, \texttt{GetFulltextFeed}. In order to keep use cases as small and focused as possible, one common area of functionality, \texttt{LogUsage} has been separated out into a separate use case and incorporated via \texttt{<<include>>}. This use use case is more than just an implementation detail: a requirement of the new system identified in discussion with stakeholders is that it provides more comprehensive logging of requests than the legacy system it replaces, to enable the business to make informed decisions about how to support web syndication in the future (accessed by the \texttt{CreateUsageReport} use case). We indicate these use cases on the diagram to reflect their relative priority.
+
+In other cases arrowheads have been omitted from actor-use-case relationships as they do not provide significant value here (see Ambler 2005, p.39).
 
 \subsubsection{Use case specification}
 
-In order to describe each use case in more detail, we can use the tabular structure for use case specifications recommended by Arlow and Neustadt (2005), an example of which for one of the use cases shown in Figure~\ref{use-cases} (\texttt{GetFeed}), can be seen in Table~\ref{use-case-detail}. In this use case the primary actor (the one who triggers the use case) is the \texttt{Subscriber}. This use case has one major possible alternative flow, which occurs when the subscriber requests a non-existent feed and is shown in Table~\ref{use-case-alt-detail}. An alternative approach would have been to use the \textit{If} and \textit{Else} keywords within the main flow of Table~\ref{use-case-detail} to describe an alternate flow without creating an entire separate specification. This option was rejected on the grounds that it might hinder intelligibility for non-technical readers, since "use cases are all about communication with the stakeholders" (Arlow and Neustadt 2005, p.101).
+In order to describe each use case in more detail, we can use the tabular structure for use case specifications recommended by Arlow and Neustadt (2005), an example of which for one of the use cases shown in Figure~\ref{use-cases} (\texttt{GetFeed}), can be seen in Table~\ref{use-case-detail}. In this use case the primary actor (the one who triggers the use case) is the \texttt{Subscriber}. This use case has one major possible alternative flow, which occurs when the subscriber requests a non-existent feed (\texttt{MissingFeed}). An alternative approach would have been to use the \textit{If} and \textit{Else} keywords within the main flow of Table~\ref{use-case-detail} to describe an alternate flow without creating an entire separate specification. This option was rejected on the grounds that it might hinder intelligibility for non-technical readers, since "use cases are all about communication with the stakeholders" (Arlow and Neustadt 2005, p.101).
 
 % More discussion of stakeholder difficulties with advanced use case features point on p110
 % TODO discuss merits of using <<include>> etc. and why we reject it?
 
-\begin{table}[]
+\begin{table}[t]
 \begin{center}
 \begin{tabular}{ | p{\textwidth} |}
 \hline
@@ -163,42 +166,9 @@ GetFeed:MissingFeed \\
 \label{use-case-detail}
 \end{table}
 
-\begin{table}[]
-\begin{center}
-\begin{tabular}{ | p{\textwidth} |}
-\hline
-\multicolumn{1}{|c|}{Alternative flow: GetFeed:MissingFeed} \\
-\hline
-ID: 1.1 \\
-\hline
-Brief description: \\
-The system notifies the user that the requested feed does not exist. \\
-\hline
-Primary actors: \\
-Subscriber \\
-\hline
-Secondary actors: \\
-None \\
-\hline
-Preconditions: \\
-1. There is no content for the requested feed. \\
-\hline
-Alternative flow: \\
-1. The alternative flow begings after step 2 of the main flow. \\
-2. The system displays an error message to the Subscriber \\
-\hline
-Postconditions: \\
-None \\
-\hline
-\end{tabular}
-\end{center}
-\caption{Example of a use case alternative flow specification}
-\label{use-case-alt-detail}
-\end{table}
-
 \subsection{Analysis}
 
-\subsubsection{Analysis classes}
+\subsubsection{Analysis model}
 
 The use cases identified in the previous section can be used to produce an analysis model that focuses on \textit{what} the system does (but not yet \textit{how} it does it). Any artefacts produced in this workflow should remain useful to as many stakeholders as possible by using language from the business domain and avoiding implementation details (Arlow and Neustadt 2005, p.122).
 
@@ -260,11 +230,13 @@ Figure~\ref{sequence-diagram} shows a sequence diagram which realises the 'GetFe
 
 The result of the \texttt{validateFeed} self-delegation message sent by \texttt{FeedBroker} is assigned to a temporary variable, \texttt{isValid}. This enables it to be used in the guard conditions of the \texttt{alt} operator (is there an alternative?)
 
+% TODO name object only when you reference them in messages (Ambler 2005, p.86) - trade off is having some named some anonymous objects which some people find confusing
+
 \subsection{Design}
 
-\subsubsection{Design classes}
+\subsubsection{Design model}
 
-In the design workflow we typically refine the relationships between classes to make them explicit. Figure~\ref{design-classes} shows a refinement of some of the design classes from Figure~\ref{analysis-classes}. Attributes and association names have been omitted for clarity, in order to focus on the semantics of the associations. For example, \texttt{Feed} and \texttt{FeedItem} form a whole-part relationship, and because multiplicity on the 'whole' side (\texttt{Feed}) is 1 we can consider this a composition relationship (since a \texttt{FeedItem} may only belong to one \texttt{Feed} and can have no meaningful existence outside of a \texttt{Feed} (Arlow and Neustadt 2005, p.367). The implication of Figure~\ref{design-classes} is that an instance of \texttt{Feed} can navigate to the \texttt{FeedItem}s it contains but not vice versa; if we wanted to allow navigability in the other direction we would have to represent this as an unrefined association arrow in the opposite direction (as seen between \texttt{Feed} and \texttt{Site}) to avoid breaking the asymmetry constraint of composition relationships (Arlow and Neustadt 2005, p.377).
+In the design workflow we typically refine the relationships between classes to make them explicit. Figure~\ref{design-classes} shows a refinement of some of the design classes from Figure~\ref{analysis-classes}. Attributes and association names have been omitted for clarity, in order to focus on the semantics of the associations. For example, \texttt{Feed} and \texttt{FeedItem} form a whole-part relationship, and because multiplicity on the 'whole' side (\texttt{Feed}) is 1 we can consider this a composition relationship (since a \texttt{FeedItem} may only belong to one \texttt{Feed} and can have no meaningful existence outside of a \texttt{Feed} (Arlow and Neustadt 2005, p.367). Furthermore, feed items share their persistence life cycle with the whole feed (Ambler 2005, p.72). The implication of Figure~\ref{design-classes} is that an instance of \texttt{Feed} can navigate to the \texttt{FeedItem}s it contains but not vice versa; if we wanted to allow navigability in the other direction we would have to represent this as an unrefined association arrow in the opposite direction (as seen between \texttt{Feed} and \texttt{Site}) to avoid breaking the asymmetry constraint of composition relationships (Arlow and Neustadt 2005, p.377).
 
 \begin{figure}
   \begin{center}
@@ -300,6 +272,8 @@ A UML activity diagram outlining the above approach is give in Figure~\ref{activ
 
 ...
 
+The start point has been placed at the top center of the diagram to make it more natural to read, following Ambler's advice (2005, p.115).
+
 \subsection{Method}
 
 The figures in this study were generated using PlantUML, a free open-source tool\cite{plantuml} that generates UML artefacts from plain text files.
@@ -310,40 +284,19 @@ Note that frames have not been added to the other diagram types such as class di
 
 \section{Evaluation and conclusion}
 
-% Rich pictures are never finished, they should evolve as enquiry progresses (LFA p25)
+This report has included examples of only five of the concrete diagrams in the UML specification, and has only the first three workflows of the Unified Process. Further studies could be undertaken to asses the usefulness of other diagrams such as Communication Diagrams and State Machine Diagrams in developing similar projects. One particularly rich area for investigation could be the relevance of UML Component and Deployment Diagrams in the light of the recent explosion in Cloud computing and the move away from owned hardware infrastructure and towards Continuous Delivery (CD).
 
-% How diagrams were generated
-% Limitations of tools (e.g. no package border around interaction diagrams)
-% diagrams not done (e.g. y no communication diagrams?)
+It is also worth considering why, the power of UML both as an analysis tool and as a mechanism for communicating design ideas which we have sought to demonstrate in this study, it is not (at the time of writing) now widely used outside of certain specific industrial contexts. One explanation for the apparent rejection of UML in organisations such as the BBC is the rush since the early 2000s to embrace apparently lower-risk Agile methodologies and UML's association with a now-unfashionable waterfall model of software development. This aversion to 'big bang' development has been particularly pronounced in the BBC since the public scandal surrounding the overrun and eventual collapse of its Digital Media Initiative project (BBC 2011).
+
+However, the BBC is by no means alone in this context. In a recent study (Petre 2013) 70\% of industry respondents said that they did not use UML at all, with most of the remainder saying that they only used it 'selectively' (it is worth noting that Class, Sequence and Activity diagrams were among the most used, which supports some of the choices made by this study). One of the main objections cited to UML is that it focuses too narrowly on architecture and neglects the wider context. This is the antithesis of Checkland's holistic approach to purposeful systems which are always viewed in the context of their environment and the world-view of their users. There is much scope for further work on how these two complementary approaches might be usefully combined.
+
+% Rich pictures are never finished, they should evolve as enquiry progresses (LFA p25)
 
 \section{Appendix}
 
 The following is the original proposal made for this report.
 
-\section{References}
-
 \begin{thebibliography}{9}
-
-\bibitem{bbc2013} 
-British Broadcasting Corporation (BBC), 2013.
-\textit{BBC announces ambition to double global audience to 500 million} [online].
-Available from: http://www.bbc.co.uk/mediacentre/latestnews/2013/dg-global-audience [Accessed 24 June 2016].
-
-\bibitem{w3c1997} 
-World Wide Web Consortium (W3C), 1997.
-\textit{Channel Definition Format (CDF)} [online].
-Available from: https://www.w3.org/TR/NOTE-CDFsubmit.html
-[Accessed 24 July 2016].
-
-\bibitem{checkland1990}
-Checkland, P. and Scholes, J. 1990.
-\textit{Soft Systems Methodology in Action}.
-Chichester: John Wiley
-
-\bibitem{checkland2006} 
-Checkland, P. and Poulter, J., 2006.
-\textit{Learning for Action: A Short Definitive Account of Soft Systems Methodology and its use for Practitioners, Teachers and Students}.
-Chichester: John Wiley
 
 \bibitem{arlow} 
 Arlow, J. and Neustadt, I., 2005.
@@ -355,6 +308,36 @@ Ambler, S. W., 2005.
 \textit{The Elements of UML 2.0 Style}.
 New York, NY: Cambridge University Press
 
+\bibitem{bbc2011} 
+British Broadcasting Corporation (BBC), 2011.
+\textit{The BBC's management of its Digital Media Initiative} [online].
+Available from: \url{http://downloads.bbc.co.uk/bbctrust/assets/files/pdf/review_report_research/vfm/digital_media_initiative.pdf} [Accessed 16 August 2016].
+
+\bibitem{bbc2013} 
+British Broadcasting Corporation (BBC), 2013.
+\textit{BBC announces ambition to double global audience to 500 million} [online].
+Available from: \url{http://www.bbc.co.uk/mediacentre/latestnews/2013/dg-global-audience} [Accessed 24 June 2016].
+
+\bibitem{checkland2006} 
+Checkland, P. and Poulter, J., 2006.
+\textit{Learning for Action: A Short Definitive Account of Soft Systems Methodology and its use for Practitioners, Teachers and Students}.
+Chichester: John Wiley
+
+\bibitem{checkland1990}
+Checkland, P. and Scholes, J. 1990.
+\textit{Soft Systems Methodology in Action}.
+Chichester: John Wiley
+
+\bibitem{fowler2000}
+Fowler, M., 2000.
+\textit{UML Distilled}. Second Edition.
+Reading, MA: Addison-Wesley
+
+\bibitem{fowler2003}
+Fowler, M., 2003.
+\textit{Patterns of Enterprise Application Architecture}
+Boston, MA: Addison-Wesley
+
 \bibitem{nygard}
 Nygard, M. T., 2007.
 \textit{Release It!: Design and Deploy Production-Ready Software}.
@@ -363,36 +346,37 @@ Raleigh, North Carolina: The Pragmatic Bookshelf
 \bibitem{omg2011} 
 Object Management Group (OMG), 2011.
 \textit{OMG Unified Modeling Language (OMG UML), Superstructure}. Version 2.4.1 [online].
-Available from: http://www.omg.org/spec/UML/2.4.1/Superstructure
-[Accessed 14 August 2016].
+Available from: \url{http://www.omg.org/spec/UML/2.4.1/Superstructure} [Accessed 14 August 2016].
+
+\bibitem{petre}
+Petre, M., 2013.
+\textit{UML in practice}. \textit{In}: 35th International Conference on Software Engineering (ICSE 2013), 18-26 May 2013, San Francisco, CA, USA, pp. 722–731.
 
 \bibitem{plantuml}
 PlantUML.com, 2016.
 \textit{Frequently Asked Questions} [online].
-Available from: http://plantuml.com/faq.html
-[Accessed 14 August 2016].
+Available from: \url{http://plantuml.com/faq.html} [Accessed 14 August 2016].
 
 \bibitem{rss}
-RSS Advisory Board, 2009
+RSS Advisory Board, 2009.
 \textit{RSS 2.0 Specification}. Version 2.0.11 [online].
-Available from: http://www.rssboard.org/rss-specification
-[Accessed 14 August 2016].
+Available from: \url{http://www.rssboard.org/rss-specification} [Accessed 14 August 2016].
 
 \bibitem{atomrss}
 Ruby, S., 2008.
 \textit{Rss20AndAtom10Compared} [online].
-Available from: http://www.intertwingly.net/wiki/pie/Rss20AndAtom10Compared
-[Accessed 14 August 2016].
+Available from: \url{http://www.intertwingly.net/wiki/pie/Rss20AndAtom10Compared} [Accessed 14 August 2016].
 
 \bibitem{webcaching}
-Wessels, D. 2001
+Wessels, D. 2001.
 \textit{Web Caching}.
 Sebastopol, CA: O'Reilly
 
-\bibitem{fowler}
-Fowler, M., 2003
-\textit{Patterns of Enterprise Application Architecture}
-Boston, MA: Addison-Wesley
+\bibitem{w3c1997} 
+World Wide Web Consortium (W3C), 1997.
+\textit{Channel Definition Format (CDF)} [online].
+Available from: \url{https://www.w3.org/TR/NOTE-CDFsubmit.html}
+[Accessed 24 July 2016].
 
 \end{thebibliography}
 
