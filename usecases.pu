@@ -9,15 +9,16 @@ actor AudiencesAnalyst
 
 rectangle "Web syndication manager" {
   Subscriber <|-- FulltextSubscriber
-  Subscriber --> (ListFeeds)
-  Subscriber --> (GetFeed)
+  Subscriber -- (ListFeeds)
+  Subscriber -- (GetFeed)
 
-  FulltextSubscriber --> (GetFulltextFeed)
+  FulltextSubscriber -- (GetFulltextFeed)
 
-  Journalist -> (AddContent)
-  Journalist -> (UpdateContent)
+  Journalist -- (AddContent)
+  Journalist -- (UpdateContent)
+  Journalist -- (PublishContent)
 
-  (CreateUsageReport) <-- AudiencesAnalyst
+  (CreateUsageReport) -- AudiencesAnalyst
 
   (GetFeed) ..> (LogUsage): <<include>>
   (GetFulltextFeed) ..> (LogUsage): <<include>>
