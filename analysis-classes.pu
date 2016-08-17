@@ -2,7 +2,7 @@
 
 skinparam monochrome true
 
-package Feeds {
+package "Domain Model" as model {
     class Feed {
         name
         language
@@ -25,6 +25,10 @@ package Feeds {
         description
     }
 
+    class FulltextFeedItem {
+        bodyText
+    }
+
     class Image {
         url
         width
@@ -34,15 +38,32 @@ package Feeds {
     }
 }
 
-package "Broker Things" {
-    class Broker
+package "Application Services" as services {
+    class FeedBroker {
+        processRequest()
+        logonUser()
+    }
+
+    class Logger {
+        logAccess()
+    }
+
+    class Authorisation
 }
 
-Feed "0..*" -- "1" Site : has <
+services ..> model: <<access>>
+
+Feed "0..*" - "1" Site : has <
 Feed "1" -- "1..*" FeedItem : contains >
-FeedItem "1" --> "1" Image
+FeedItem "1" -> "1" Image
+
+FulltextFeedItem -|> FeedItem
+
+FeedBroker -- Logger
+FeedBroker -- Authorisation
 
 hide circle
 hide empty methods
+hide empty attributes
 
 @enduml
