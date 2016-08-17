@@ -10,19 +10,19 @@
 
 \begin{document}
 
-\title{Usefulness of SSM and UML in Designing a Web Syndication System for the World Service}
+\title{Usefulness of SSM and UML in Designing a Web Syndication System for the BBC World Service}
 \author{James Donohue}
 
 \maketitle
 
 \begin{abstract}
-A collection of thoughts and ideas about random disconnected things.
+UML\cite{omg2011} is a industry-standard modelling language for creating enterprise applications. The British Broadcasting Corporation (BBC) had a requirement for a new system to provide web syndication feeds such as RSS in order to boost website traffic levels. By using UML in conjunction with a Soft Systems Methdology (SSM) approach, the use cases for this system were investigated, leading to a series of UML analysis and design artefacts. These diagrams were used as the basis for discussion of modelling techniques and the implications of architectural decisions made. Lastly the usefulness of this approach in the wider context of industry use of UML was considered.
 \end{abstract}
 
 \section{Introduction}
 \subsection{Background}
 
-The BBC World Service website portfolio, which currently includes 27 sites but will soon increase to nearly 40, offers news to millions of users around the world in their own language. A publicly-stated ambition of the BBC is to increase its global audience to 500 million by 2022 (British Broadcasting Corporation (BBC) 2013). One way it can contribute to this effort is through web syndication.
+The British Broadcasting Corporation (BBC) World Service website portfolio, which currently includes 27 sites but will soon increase to nearly 40, offers news to millions of users around the world in their own language. A publicly-stated ambition of the BBC is to increase its global audience to 500 million by 2022 (BBC 2013). One way it can contribute to this effort is through web syndication.
 
 Web syndication feeds allows website owners to publish information about new or changed content in a way that can be reused by other websites or end users. Standards for web syndication have existed in some form since 1997 (World Wide Web Consortium (W3C) 1997), the dominant formats today being RSS (Really Simple Syndication) and Atom (both of these are XML-based and offer a similar feature set; for the purpose of this study they are treated as equivalent).
 
@@ -284,6 +284,8 @@ Note that frames have not been added to the other diagram types such as class di
 
 \section{Evaluation and conclusion}
 
+% How could this work be useful?
+
 This report has included examples of only five of the concrete diagrams in the UML specification, and has only the first three workflows of the Unified Process. Further studies could be undertaken to asses the usefulness of other diagrams such as Communication Diagrams and State Machine Diagrams in developing similar projects. One particularly rich area for investigation could be the relevance of UML Component and Deployment Diagrams in the light of the recent explosion in Cloud computing and the move away from owned hardware infrastructure and towards Continuous Delivery (CD).
 
 It is also worth considering why, the power of UML both as an analysis tool and as a mechanism for communicating design ideas which we have sought to demonstrate in this study, it is not (at the time of writing) now widely used outside of certain specific industrial contexts. One explanation for the apparent rejection of UML in organisations such as the BBC is the rush since the early 2000s to embrace apparently lower-risk Agile methodologies and UML's association with a now-unfashionable waterfall model of software development. This aversion to 'big bang' development has been particularly pronounced in the BBC since the public scandal surrounding the overrun and eventual collapse of its Digital Media Initiative project (BBC 2011).
@@ -292,9 +294,31 @@ However, the BBC is by no means alone in this context. In a recent study (Petre 
 
 % Rich pictures are never finished, they should evolve as enquiry progresses (LFA p25)
 
-\section{Appendix}
+\clearpage
 
-The following is the original proposal made for this report.
+\section{Appendix: Proposal}
+
+The proposal is to carry out a study of the usefulness of Soft Systems Methodology (SSM) and the Unified Modelling Language (UML) in analysing a software development problem at the British Broadcasting Corporation (BBC). The study will:
+
+\begin{itemize}
+\item explain the background of the project and contextualise the requirements of the BBC for a new software system
+\item consider the ways in which aspects of SSM could be used to explore the requirements and consider the different perspectives of stakeholders
+\item use the SSM investigation along with other material as input to a series of examinations of different aspects of the problem, from requirements through to design
+\item produce a set of UML artefacts that capture and communicate important details of the problem and solution space, including the following diagram types:
+\begin{enumerate}
+\item Use Case Diagrams
+\item Class Diagrams
+\item Sequence Diagrams
+\end{enumerate}
+\item evaluate choices made both in the modelling process and in the use of UML notation and consider how other choices might have affected the result
+\item lastly, reflect on the value the work in the wider context of the use of UML at the BBC and in industry
+\end{itemize}
+
+The system design problem that will be considered is the creation of a new system to generate web syndication feeds such as RSS and Atom for BBC World Service sites. Although the BBC has an existing 'Public Feeds Adaptor' solution that provides Atom feeds, this is incompatible with the new World Service CMS and lacks flexibility. In addition, as part of a desire to share technology strategically across the BBC, the new system needs to cover the requirements of (English-language) News and Sport services. The new system also needs to provide more comprehensive usage data to support business decisions.
+
+The study will engage with questions of how and when UML should be used in such a design process and what value is can provide to implementors and stakeholders, as well as with questions of enterprise application design patterns and the implications of supporting multiple syndication formats. The result will be a useful record of the design direction of the new syndication system and point the way in terms of future use of UML, especially in the context of Agile methods at the BBC.
+
+\clearpage
 
 \begin{thebibliography}{9}
 
