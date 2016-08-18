@@ -1,0 +1,57 @@
+@startuml
+
+skinparam monochrome true
+
+frame "sd GetFeed" {
+    artifact a1
+    artifact a2
+    artifact a3
+    artifact a4
+    artifact a5
+    artifact a6
+    artifact a7
+    artifact a8
+    artifact a9
+    artifact a10
+    artifact a11
+    artifact a12
+    artifact a13
+    artifact a14
+    artifact a15
+    artifact a16
+    artifact a17
+    artifact a18
+    artifact a19
+    artifact a20
+    artifact a11
+    artifact a22
+    artifact a23
+    artifact a24
+    artifact a25
+    artifact a26
+    artifact a27
+    artifact a28
+    artifact a29
+    artifact a30
+    artifact a31
+    artifact a32
+    artifact a33
+    artifact a34
+    artifact a35
+    artifact a36
+    artifact a37
+    artifact a38
+    artifact a39
+    artifact a40
+    artifact a41
+    artifact a42
+    artifact a43
+    artifact a44
+    artifact a45
+    artifact a46
+    artifact a47
+    artifact a48
+    artifact a49
+}
+
+@enduml
