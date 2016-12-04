@@ -43,6 +43,8 @@ Syndication feeds are especially significant to a publisher such as the BBC Worl
 
 Beyond the well-established RSS and Atom formats, newer formats syndication of web content, often using JSON (JavaScript Object Notation) syntax, are emerging. These formats a range of additional possibilties for sharing news content across different platforms and devices, often with richer and more structured metadata. Although there is no specific requirement to support these formats at present, one requirement for the new syndication platform is to offer greater flexibility around output formats so that they could be added at a later stage.
 
+% TODO add more domain citations here
+
 
 \section{Methodology}
 
@@ -84,8 +86,6 @@ Finally, we should give consideration to the environment (the E of CATWOE). Ther
 \subsection{UML artefacts}
 
 In this section we present a series of UML diagrams that explore the problem domain described above. These diagrams are organised according to some of the workflows within the software development lifecycle recommended by the Unified Process (UP).
-
-% UML outputs from section 2
 
 
 \subsubsection{Use case diagram}
@@ -236,9 +236,9 @@ As the diagram indicates, the Fail Fast behaviour described above is modified by
 
 The figures in this study were generated using PlantUML, a free open-source tool\cite{plantuml} that generates UML artefacts from plain text files.
 
-The UML 2.0 Superstructure specification states that interaction diagrams (of which sequence diagrams are a specialised form) are surrounded by a ``solid-outline rectangle'' including the interaction name in the upper left corner (\cite{omg2011} p.496). Since at the time of writing PlantUML does not support automatically generating this rectangle, it has been manually added before inclusion in this document. Interestingly, PlantUML can produce a `frame' icon that fits the above description when generating deployment diagrams. Since PlantUML is open source software, a helpful contribution to this project (and to the wider UML community) would be to add support for automatically adding the rectangle and title to interaction diagrams in order to make them compliant with the specification. 
+The UML 2.0 Superstructure specification states that interaction diagrams (of which sequence diagrams are a specialised form) are surrounded by a ``solid-outline rectangle'' including the interaction name in the upper left corner (\cite{omg2011} p.496). Since at the time of writing PlantUML does not support automatically generating this rectangle, it has been omitted from the diagram included in this document. Interestingly, PlantUML can produce a `frame' icon that fits the above description when generating deployment diagrams. Since PlantUML is open source software, a helpful contribution to this project (and to the wider UML community) would be to add support for automatically adding the rectangle and title to interaction diagrams in order to make them compliant with the specification.
 
-Note that frames have not been added to the other diagram types such as class diagrams because they are not mandated by the specification for these types (\cite{omg2011} p.691). This follows the approach taken in the figures in \cite{arlow}.
+Note that frames are not missing from the other diagram types such as class diagrams because they are not mandated by the specification for these types (\cite{omg2011} p.691). This follows the approach taken in the figures in \cite{arlow}.
 
 
 \section{Conclusions}
